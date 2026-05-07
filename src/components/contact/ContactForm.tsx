@@ -5,6 +5,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { contactSchema, TOPICS, type ContactFormValues } from '@/lib/schemas/contact';
 import { Button } from '@/components/ui/Button';
+import { submitContact, type SubmitContactError } from '@/app/contact/actions';
+import { brand } from '@/lib/tokens';
+import { buildWhatsAppLink } from '@/lib/whatsapp';
 
 const topicLabel: Record<(typeof TOPICS)[number], string> = {
   importing_an_ev: 'Importing an EV',
@@ -15,8 +18,17 @@ const topicLabel: Record<(typeof TOPICS)[number], string> = {
   other: 'Other',
 };
 
+const errorCopy: Record<SubmitContactError, string> = {
+  invalid_payload: 'Some fields look off — please review and resubmit.',
+  recaptcha_failed: 'Spam check failed. Try again or message us on WhatsApp.',
+  db_error: 'Our system hiccuped. Please try again or message us on WhatsApp.',
+  network_error: 'Network error. Try again or message us on WhatsApp.',
+};
+
 export function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [errorKind, setErrorKind] = useState<SubmitContactError | null>(null);
+  const [submittedRef, setSubmittedRef] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -32,19 +44,65 @@ export function ContactForm() {
 
   async function onSubmit(values: ContactFormValues) {
     setStatus('submitting');
-    const res = await fetch('/api/contact', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(values),
-    });
-    setStatus(res.ok ? 'success' : 'error');
+    setErrorKind(null);
+
+    // reCAPTCHA token attachment is opt-in: only if the global grecaptcha is loaded
+    // (i.e. NEXT_PUBLIC_RECAPTCHA_SITE_KEY is set on the deployment). If not, we send
+    // an empty token and the server falls into dev-mode-pass behaviour (or rejects
+    // in production without a secret, per the verifyRecaptchaToken contract).
+    let recaptchaToken: string | undefined;
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const grecaptcha = (window as any).grecaptcha;
+      const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+      if (grecaptcha && siteKey) {
+        recaptchaToken = await new Promise<string>((resolve) => {
+          grecaptcha.ready(() => {
+            grecaptcha
+              .execute(siteKey, { action: 'contact_submit' })
+              .then((t: string) => resolve(t))
+              .catch(() => resolve(''));
+          });
+        });
+      }
+    } catch {
+      recaptchaToken = undefined;
+    }
+
+    const result = await submitContact({ ...values, recaptchaToken });
+    if (result.ok) {
+      setSubmittedRef(result.leadId ? `lead-${result.leadId}` : 'lead');
+      setStatus('success');
+    } else {
+      setErrorKind(result.error ?? 'network_error');
+      setStatus('error');
+    }
   }
 
   if (status === 'success') {
+    const waLink = buildWhatsAppLink({
+      phone: brand.whatsapp.egypt,
+      message: submittedRef
+        ? `Hi VoltAuto — I just submitted the contact form (ref: ${submittedRef}).`
+        : 'Hi VoltAuto — I just submitted the contact form.',
+    });
     return (
       <div className="card-base p-6 text-sm text-brand-text-secondary">
         <strong className="text-brand-green">Thanks — we got it.</strong> We&apos;ll WhatsApp
         you within 30 minutes during business hours.
+        <div className="mt-4">
+          <a
+            href={waLink}
+            target="_blank"
+            rel="noopener"
+            className="inline-flex items-center gap-2 rounded-md bg-brand-whatsapp px-4 py-2 text-xs font-bold text-black transition-transform hover:scale-105 motion-reduce:hover:scale-100"
+          >
+            <span>●</span> Open WhatsApp now
+          </a>
+          <span className="ml-3 text-[11px] text-brand-text-dim">
+            (or wait for us — your call)
+          </span>
+        </div>
       </div>
     );
   }
@@ -127,8 +185,8 @@ export function ContactForm() {
         {isSubmitting ? 'Sending…' : 'Send enquiry →'}
       </Button>
 
-      {status === 'error' && (
-        <p className="text-xs text-red-400">Something went wrong. Please try again or WhatsApp us.</p>
+      {status === 'error' && errorKind && (
+        <p className="text-xs text-red-400">{errorCopy[errorKind]}</p>
       )}
       <p className="text-center font-mono text-[10px] uppercase tracking-eyebrow text-brand-text-dim">
         We reply within 30 min during business hours
