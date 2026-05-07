@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter, Archivo_Black, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
+import { Nav } from '@/components/layout/Nav';
+import { Footer } from '@/components/layout/Footer';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -45,7 +47,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={`${inter.variable} ${archivoBlack.variable} ${jetbrainsMono.variable} bg-black font-body text-brand-text-primary antialiased`}
       >
-        {children}
+        <Nav />
+        <main className="min-h-[60vh]">{children}</main>
+        <Footer />
       </body>
     </html>
   );
