@@ -16,14 +16,16 @@
   --color-brand-steel-info: #9aa9b8;
   --color-brand-whatsapp: #25d366;
 
-  /* Font families — exposed as font-display, font-body, font-mono utilities */
-  /* Values reference CSS custom properties set by next/font in src/app/layout.tsx (Task 4) */
+  /* Custom letter-spacing — exposed as tracking-eyebrow utility */
+  --tracking-eyebrow: 0.15em;
+}
+
+@theme inline {
+  /* Font families — `inline` keeps var() as runtime references so next/font
+     stack values set by Task 4 on <body> propagate through. */
   --font-display: var(--font-display-stack), "Archivo Black", system-ui, sans-serif;
   --font-body: var(--font-body-stack), "Inter", system-ui, sans-serif;
   --font-mono: var(--font-mono-stack), "JetBrains Mono", ui-monospace, monospace;
-
-  /* Custom letter-spacing — exposed as tracking-eyebrow utility */
-  --tracking-eyebrow: 0.15em;
 }
 
 @layer base {
