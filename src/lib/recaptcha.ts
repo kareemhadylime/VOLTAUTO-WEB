@@ -15,11 +15,15 @@ interface RecaptchaSiteVerifyResponse {
 /**
  * Server-side reCAPTCHA v3 token verification.
  *
- * - In production WITHOUT a secret env var → returns valid=false, score=0
- *   (so we never silently let unverified traffic through).
- * - In non-production WITHOUT a secret → returns valid=true, score=0.5
- *   (dev convenience; lets local form submission work without keys).
- * - With a secret + token → POSTs to Google, returns Google's verdict.
+ * - Without RECAPTCHA_SECRET set → reCAPTCHA is treated as DISABLED (not failed).
+ *   Returns valid=true with score=0. Match's the plan's "Phase 2 optional" contract.
+ *   To enable real spam protection, set both NEXT_PUBLIC_RECAPTCHA_SITE_KEY (client)
+ *   and RECAPTCHA_SECRET (server) and redeploy.
+ * - With RECAPTCHA_SECRET set + a valid token from grecaptcha.execute → POSTs to
+ *   Google's siteverify endpoint and returns the verdict (success && score>=0.5
+ *   && action match if expectedAction provided).
+ * - With RECAPTCHA_SECRET set but token empty/invalid OR Google rejects →
+ *   returns valid=false. This is what enforces real spam protection once enabled.
  *
  * Pass `expectedAction` when the client called `grecaptcha.execute(siteKey, { action })`
  * with a specific action — Google verifies the submitted token was issued for that action.
@@ -30,10 +34,8 @@ export async function verifyRecaptchaToken(
 ): Promise<RecaptchaResult> {
   const secret = process.env.RECAPTCHA_SECRET;
   if (!secret) {
-    if (process.env.NODE_ENV === 'production') {
-      return { valid: false, score: 0 };
-    }
-    return { valid: true, score: 0.5 };
+    // reCAPTCHA disabled (no secret configured). Plan-defined "optional" behavior.
+    return { valid: true, score: 0 };
   }
 
   const params = new URLSearchParams();

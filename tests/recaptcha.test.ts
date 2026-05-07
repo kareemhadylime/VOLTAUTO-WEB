@@ -42,16 +42,22 @@ describe('verifyRecaptchaToken', () => {
     expect(r.valid).toBe(false);
   });
 
-  it('returns dev-mode pass when RECAPTCHA_SECRET is unset (NODE_ENV !== production)', async () => {
+  it('treats reCAPTCHA as disabled (valid=true, score=0) when RECAPTCHA_SECRET is unset, in either environment', async () => {
+    // Test in dev
     vi.unstubAllEnvs();
     vi.stubEnv('NODE_ENV', 'development');
-    const r = await verifyRecaptchaToken('any-token');
-    expect(r).toEqual({ valid: true, score: 0.5 });
-  });
+    let r = await verifyRecaptchaToken('any-token');
+    expect(r).toEqual({ valid: true, score: 0 });
 
-  it('returns valid=false in production when secret is unset', async () => {
+    // And in production — same behavior per Phase 2 optional contract
     vi.unstubAllEnvs();
     vi.stubEnv('NODE_ENV', 'production');
+    r = await verifyRecaptchaToken('any-token');
+    expect(r).toEqual({ valid: true, score: 0 });
+  });
+
+  it('returns valid=false when Google verify fetch fails (network error)', async () => {
+    globalThis.fetch = vi.fn().mockRejectedValue(new Error('network down')) as unknown as typeof fetch;
     const r = await verifyRecaptchaToken('any-token');
     expect(r).toEqual({ valid: false, score: 0 });
   });
