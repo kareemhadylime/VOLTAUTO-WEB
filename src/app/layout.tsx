@@ -5,6 +5,8 @@ import { Nav } from '@/components/layout/Nav';
 import { Footer } from '@/components/layout/Footer';
 import { WhatsAppFloating } from '@/components/layout/WhatsAppFloating';
 import { CookieBanner } from '@/components/layout/CookieBanner';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { buildLocalBusinessJsonLd } from '@/lib/seo/localBusinessSchema';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -49,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={`${inter.variable} ${archivoBlack.variable} ${jetbrainsMono.variable} bg-black font-body text-brand-text-primary antialiased`}
       >
+        <JsonLd data={buildLocalBusinessJsonLd(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://voltauto.biz')} />
         <Nav />
         <main className="min-h-[60vh]">{children}</main>
         <Footer />
