@@ -18,6 +18,7 @@ export const contactSchema = z.object({
   vehicleModel: z.string().max(60).optional(),
   message: z.string().min(5).max(2000),
   consentWhatsApp: z.boolean(),
+  recaptchaToken: z.string().optional(),
 });
 
 export type ContactFormValues = z.infer<typeof contactSchema>;
