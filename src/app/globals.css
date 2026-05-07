@@ -1,26 +1,59 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Brand colors — exposed as bg-brand-*, text-brand-*, border-brand-* utilities */
+  --color-brand-green: #72ab44;
+  --color-brand-green-hover: #37551f;
+  --color-brand-bg-raised: #0a0a0a;
+  --color-brand-bg-panel: #0f0f0f;
+  --color-brand-border: #1f1f1f;
+  --color-brand-border-soft: #1a1a1a;
+  --color-brand-text-primary: #ffffff;
+  --color-brand-text-secondary: #d0d0d0;
+  --color-brand-text-muted: #9a9a9a;
+  --color-brand-text-dim: #7a7a7a;
+  --color-brand-amber-warn: #d69450;
+  --color-brand-steel-info: #9aa9b8;
+  --color-brand-whatsapp: #25d366;
+
+  /* Font families — exposed as font-display, font-body, font-mono utilities */
+  /* Values reference CSS custom properties set by next/font in src/app/layout.tsx (Task 4) */
+  --font-display: var(--font-display-stack), "Archivo Black", system-ui, sans-serif;
+  --font-body: var(--font-body-stack), "Inter", system-ui, sans-serif;
+  --font-mono: var(--font-mono-stack), "JetBrains Mono", ui-monospace, monospace;
+
+  /* Custom letter-spacing — exposed as tracking-eyebrow utility */
+  --tracking-eyebrow: 0.15em;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: dark;
+  }
+  html, body {
+    background-color: #000;
+    color: var(--color-brand-text-primary);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  ::selection {
+    background-color: var(--color-brand-green);
+    color: #000;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .eyebrow {
+    @apply font-mono text-[10px] uppercase tracking-eyebrow text-brand-green;
+  }
+  .pill-eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-brand-green/30 bg-brand-green/10 px-3 py-1 font-mono text-[10px] uppercase tracking-eyebrow text-brand-green;
+  }
+  .card-base {
+    @apply rounded-md border border-brand-border bg-brand-bg-raised;
+  }
+  .container-prose {
+    @apply mx-auto max-w-7xl px-6 sm:px-8 lg:px-12;
+  }
 }
