@@ -65,7 +65,7 @@ export default function ContactPage() {
             quote, an inspection date, or a fleet conversation invite — whatever fits.
           </p>
           <p className="mt-3 font-mono text-[10px] uppercase tracking-eyebrow text-brand-text-dim">
-            Phase 1: posts to mock <code>/api/contact</code> route. Phase 2 wires Supabase + Resend.
+            Submissions land in our CRM inbox; we follow up on WhatsApp within 30 min.
           </p>
         </div>
 
