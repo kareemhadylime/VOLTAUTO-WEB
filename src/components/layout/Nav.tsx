@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { brand } from '@/lib/tokens';
 import { buildWhatsAppLink } from '@/lib/whatsapp';
@@ -6,6 +6,7 @@ import { buildWhatsAppLink } from '@/lib/whatsapp';
 const navLinks = [
   { href: '/vehicles', label: 'Vehicles' },
   { href: '/fleet', label: 'Fleet' },
+  { href: '/gallery', label: 'Gallery' },
   { href: '/calculator', label: 'Calculator' },
   { href: '/import', label: 'Import' },
   { href: '/about', label: 'About' },
@@ -37,10 +38,10 @@ export function Nav() {
             aria-hidden
             className="hidden rounded border border-brand-border-soft px-2.5 py-1 font-mono text-[10px] tracking-eyebrow text-brand-text-muted md:inline-flex"
           >
-            🇪🇬 EG / 🇦🇪 UAE
+            ðŸ‡ªðŸ‡¬ EG / ðŸ‡¦ðŸ‡ª UAE
           </span>
           <Button variant="primary" size="sm" href={buildWhatsAppLink({ phone: brand.whatsapp.egypt })}>
-            WhatsApp →
+            WhatsApp â†’
           </Button>
         </div>
       </div>
