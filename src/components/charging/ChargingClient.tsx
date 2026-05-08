@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
-import type { OcmPoi, CountryCode } from '@/lib/charging';
-import { COUNTRY_CONFIG, ocmStats } from '@/lib/charging';
+import type { OcmPoi, CountryCode } from '@/lib/charging-shared';
+import { COUNTRY_CONFIG, ocmStats } from '@/lib/charging-shared';
 
 const LeafletMap = dynamic(() => import('./LeafletMap'), {
   ssr: false,

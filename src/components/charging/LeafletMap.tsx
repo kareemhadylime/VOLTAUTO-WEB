@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import type { OcmPoi, CountryCode } from '@/lib/charging';
-import { COUNTRY_CONFIG } from '@/lib/charging';
+import type { OcmPoi, CountryCode } from '@/lib/charging-shared';
+import { COUNTRY_CONFIG } from '@/lib/charging-shared';
 
 // ── Custom div-icons (no image files needed) ─────────────────────────────────
 function makeIcon(fast: boolean) {
