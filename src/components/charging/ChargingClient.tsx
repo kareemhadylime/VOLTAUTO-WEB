@@ -1,13 +1,18 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import type { OcmPoi, CountryCode } from '@/lib/charging';
 import { COUNTRY_CONFIG, ocmStats } from '@/lib/charging';
 
-const OCM_EMBED: Record<CountryCode, string> = {
-  EG: 'https://map.openchargemap.io/#/map?zoom=6&lng=30.8025&lat=26.8206',
-  AE: 'https://map.openchargemap.io/#/map?zoom=8&lng=54.3773&lat=24.4539',
-};
+const LeafletMap = dynamic(() => import('./LeafletMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[500px] w-full rounded-xl bg-slate-900 flex items-center justify-center text-slate-500 text-sm">
+      Loading map…
+    </div>
+  ),
+});
 
 interface Props {
   egPois: OcmPoi[];
@@ -56,18 +61,9 @@ export function ChargingClient({ egPois, aePois }: Props) {
         ))}
       </div>
 
-      {/* OCM embed map */}
+      {/* Leaflet dark map */}
       <div className="rounded-xl overflow-hidden border border-slate-700">
-        <iframe
-          key={country}                  /* remount on country change */
-          src={OCM_EMBED[country]}
-          width="100%"
-          height="480"
-          style={{ border: 'none', display: 'block' }}
-          loading="lazy"
-          title={`EV charging stations in ${cfg.name}`}
-          allowFullScreen
-        />
+        <LeafletMap pois={pois} country={country} />
       </div>
 
       {/* Station list */}
