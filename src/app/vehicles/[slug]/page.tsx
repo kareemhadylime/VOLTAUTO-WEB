@@ -10,13 +10,17 @@ import { WhatsIncluded } from '@/components/vehicles/WhatsIncluded';
 import { ImportTimeline } from '@/components/vehicles/ImportTimeline';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { buildVehicleJsonLd } from '@/lib/seo/vehicleSchema';
-import { seedVehicles } from '@/lib/seed/vehicles';
+import { getAllVehicles, getVehicleBySlug } from '@/lib/inventory';
 import { formatEgp, formatKm, formatKwh } from '@/lib/format';
 import { buildWhatsAppLink } from '@/lib/whatsapp';
 import { brand } from '@/lib/tokens';
 
-export function generateStaticParams() {
-  return seedVehicles.map((v) => ({ slug: v.slug }));
+// ISR — rebuild every 5 minutes; on-demand revalidation lives in /api/revalidate (Phase 6).
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  const all = await getAllVehicles();
+  return all.map((v) => ({ slug: v.slug }));
 }
 
 export async function generateMetadata({
@@ -25,7 +29,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const v = seedVehicles.find((x) => x.slug === slug);
+  const v = await getVehicleBySlug(slug);
   if (!v) return {};
   return {
     title: `${v.brand} ${v.model} ${v.trim ?? ''} — landed-cost EV import`,
@@ -35,7 +39,7 @@ export async function generateMetadata({
 
 export default async function VehicleDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const v = seedVehicles.find((x) => x.slug === slug);
+  const v = await getVehicleBySlug(slug);
   if (!v) notFound();
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://voltauto.biz';

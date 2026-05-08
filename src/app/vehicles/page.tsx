@@ -3,8 +3,11 @@ import { Eyebrow } from '@/components/ui/Eyebrow';
 import { VehicleCard } from '@/components/vehicles/VehicleCard';
 import { BrandGrid } from '@/components/vehicles/BrandGrid';
 import { RequestAnyEvPanel } from '@/components/vehicles/RequestAnyEvPanel';
-import { seedVehicles } from '@/lib/seed/vehicles';
 import { seedBrands } from '@/lib/seed/brands';
+import { getAllVehicles, getFeaturedVehicles } from '@/lib/inventory';
+
+// ISR — rebuild every 5 minutes so a CRM toggle is visible quickly without a deploy.
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: 'EV catalog · import on request',
@@ -12,8 +15,9 @@ export const metadata: Metadata = {
     'Every Chinese-made EV currently worth importing — BYD, NEVO, Denza, Arcfox, plus China-built BMW, Mercedes, Honda. Featured imports + request any model.',
 };
 
-export default function VehiclesPage() {
-  const featured = seedVehicles.filter((v) => v.isFeatured);
+export default async function VehiclesPage() {
+  const [featured, all] = await Promise.all([getFeaturedVehicles(), getAllVehicles()]);
+  void all; // reserved for the brand-clustered listing below; seedBrands powers the catalog cards for now.
   return (
     <>
       <section

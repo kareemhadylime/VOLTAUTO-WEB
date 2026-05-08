@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
-import { seedVehicles } from '@/lib/seed/vehicles';
+import { getAllVehicles } from '@/lib/inventory';
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://voltauto.biz';
 
 export async function GET() {
+  const all = await getAllVehicles();
   const lines: string[] = [
     '# VoltAuto — Egypt\'s China-EV import specialist',
     '',
@@ -19,7 +20,7 @@ export async function GET() {
     'Order → spec confirm → factory secure → in-China inspection → ocean freight → Egypt customs → PDI → delivery. Eight to ten weeks.',
     '',
     '## Featured vehicles (current catalog)',
-    ...seedVehicles.map((v) => `- ${v.brand} ${v.model} ${v.trim ?? ''} — ${BASE}/vehicles/${v.slug}`),
+    ...all.map((v) => `- ${v.brand} ${v.model} ${v.trim ?? ''} — ${BASE}/vehicles/${v.slug}`),
     '',
     '## Contact',
     'WhatsApp: +20 111 6200 099 · Email: hello@voltauto.biz',

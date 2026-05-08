@@ -1,9 +1,9 @@
 import type { MetadataRoute } from 'next';
-import { seedVehicles } from '@/lib/seed/vehicles';
+import { getAllVehicles } from '@/lib/inventory';
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://voltauto.biz';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${BASE}/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 1 },
     { url: `${BASE}/vehicles`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
@@ -12,7 +12,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/contact`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
   ];
 
-  const vehicleRoutes: MetadataRoute.Sitemap = seedVehicles.map((v) => ({
+  const all = await getAllVehicles();
+  const vehicleRoutes: MetadataRoute.Sitemap = all.map((v) => ({
     url: `${BASE}/vehicles/${v.slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',
