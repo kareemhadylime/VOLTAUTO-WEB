@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/Button';
+import { grantConsent, type ConsentLevel } from '@/lib/analytics';
 
 const STORAGE_KEY = 'voltauto-consent-v1';
 
@@ -10,11 +11,18 @@ export function CookieBanner() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    if (!localStorage.getItem(STORAGE_KEY)) setOpen(true);
+    const stored = localStorage.getItem(STORAGE_KEY) as ConsentLevel | null;
+    if (!stored) {
+      setOpen(true);
+    } else {
+      // Restore consent for scripts that loaded after the banner was already decided
+      grantConsent(stored);
+    }
   }, []);
 
-  function decide(value: 'all' | 'essential') {
+  function decide(value: ConsentLevel) {
     localStorage.setItem(STORAGE_KEY, value);
+    grantConsent(value);
     setOpen(false);
   }
 
