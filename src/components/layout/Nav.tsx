@@ -5,8 +5,10 @@ import { buildWhatsAppLink } from '@/lib/whatsapp';
 
 const navLinks = [
   { href: '/vehicles', label: 'Vehicles' },
+  { href: '/uae', label: '🇦🇪 UAE' },
   { href: '/fleet', label: 'Fleet' },
   { href: '/gallery', label: 'Gallery' },
+  { href: '/charging', label: 'Charging' },
   { href: '/calculator', label: 'Calculator' },
   { href: '/import', label: 'Import' },
   { href: '/about', label: 'About' },
