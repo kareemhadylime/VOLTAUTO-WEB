@@ -8,6 +8,7 @@ const navLinks = [
   { href: '/uae', label: 'AE UAE' },
   { href: '/fleet', label: 'Fleet' },
   { href: '/gallery', label: 'Gallery' },
+  { href: '/offers', label: 'Offers' },
   { href: '/charging', label: 'Charging' },
   { href: '/calculator', label: 'Calculator' },
   { href: '/import', label: 'Import' },
