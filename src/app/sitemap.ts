@@ -1,4 +1,4 @@
-﻿import type { MetadataRoute } from 'next';
+import type { MetadataRoute } from 'next';
 import { getAllVehicles } from '@/lib/inventory';
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://voltauto.biz';
@@ -10,6 +10,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/uae`,        lastModified: new Date(), changeFrequency: 'daily',   priority: 0.9 },
     { url: `${BASE}/fleet`,      lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${BASE}/gallery`,    lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.8 },
+    { url: `${BASE}/offers`,     lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.8 },
     { url: `${BASE}/charging`,   lastModified: new Date(), changeFrequency: 'daily',   priority: 0.8 },
     { url: `${BASE}/calculator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE}/import`,     lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
