@@ -9,18 +9,17 @@ export function GoogleAnalytics() {
 
   return (
     <>
-      {/* Consent Mode v2 defaults must fire BEFORE the GA4 tag loads */}
       <Script id="ga4-consent-default" strategy="afterInteractive">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
-          var _c = (typeof localStorage !== 'undefined' && localStorage.getItem('voltauto-consent-v1')) || 'denied';
-          var _g = _c === 'all' ? 'granted' : 'denied';
+          var stored = typeof localStorage !== 'undefined' ? localStorage.getItem('voltauto-consent-v1') : null;
+          var level = stored === 'all' ? 'granted' : 'denied';
           gtag('consent', 'default', {
-            analytics_storage:  _g,
-            ad_storage:         _g,
-            ad_user_data:       _g,
-            ad_personalization: _g,
+            analytics_storage: level,
+            ad_storage: level,
+            ad_user_data: level,
+            ad_personalization: level,
           });
         `}
       </Script>
