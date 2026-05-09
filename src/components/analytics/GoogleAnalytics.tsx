@@ -14,12 +14,13 @@ export function GoogleAnalytics() {
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
+          var _c = (typeof localStorage !== 'undefined' && localStorage.getItem('voltauto-consent-v1')) || 'denied';
+          var _g = _c === 'all' ? 'granted' : 'denied';
           gtag('consent', 'default', {
-            analytics_storage:  'denied',
-            ad_storage:         'denied',
-            ad_user_data:       'denied',
-            ad_personalization: 'denied',
-            wait_for_update:    500,
+            analytics_storage:  _g,
+            ad_storage:         _g,
+            ad_user_data:       _g,
+            ad_personalization: _g,
           });
         `}
       </Script>
