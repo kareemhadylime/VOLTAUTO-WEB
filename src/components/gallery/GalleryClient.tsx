@@ -111,9 +111,9 @@ function CardMedia({
     );
   }
 
-  // Derive padding-bottom from aspect_ratio metadata (WxH) or raw width/height
+  // Derive padding-bottom from aspect_ratio metadata or raw width/height
   let pb = '100%';
-  if (item.aspect_ratio?.includes(':')) {
+  if (typeof item.aspect_ratio === 'string' && item.aspect_ratio.includes(':')) {
     const [w, h] = item.aspect_ratio.split(':').map(Number);
     if (w && h) pb = `${(h / w) * 100}%`;
   } else if (item.width && item.height) {
