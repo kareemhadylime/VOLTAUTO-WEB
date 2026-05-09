@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { getAllVehicles } from '@/lib/inventory';
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://voltauto.biz';
+const BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://voltauto.biz').trim().replace(/\/$/,'');
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
