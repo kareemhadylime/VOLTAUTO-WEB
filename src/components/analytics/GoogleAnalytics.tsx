@@ -9,20 +9,8 @@ export function GoogleAnalytics() {
 
   return (
     <>
-      <Script id="ga4-consent-default" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          var stored = typeof localStorage !== 'undefined' ? localStorage.getItem('voltauto-consent-v1') : null;
-          var level = stored === 'all' ? 'granted' : 'denied';
-          gtag('consent', 'default', {
-            analytics_storage: level,
-            ad_storage: level,
-            ad_user_data: level,
-            ad_personalization: level,
-          });
-        `}
-      </Script>
+      {/* Consent default loaded from public file — avoids inline script encoding issues */}
+      <Script src="/ga4-consent.js" strategy="afterInteractive" />
 
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
