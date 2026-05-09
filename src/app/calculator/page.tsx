@@ -6,7 +6,7 @@ import { Eyebrow } from '@/components/ui/Eyebrow';
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: 'Lease & finance calculator',
+  title: 'EV Lease Calculator Egypt | Estimate Monthly Payments',
   description:
     'Estimate the monthly payment for any VoltAuto-imported EV. Adjust downpayment, term, and APR — get a live monthly figure. Pure transparency, no hidden fees.',
 };

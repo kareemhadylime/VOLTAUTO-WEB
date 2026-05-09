@@ -7,7 +7,7 @@ import { buildWhatsAppLink } from '@/lib/whatsapp';
 import { brand } from '@/lib/tokens';
 
 export const metadata: Metadata = {
-  title: 'Fleet · EV vs ICE 5-year TCO',
+  title: 'EV Fleet Calculator Egypt | 5-Year TCO vs Petrol',
   description:
     'Run the numbers on switching your Egyptian fleet to EVs. Adjust fleet size, daily km, CAPEX, and petrol price — see 5-year savings live. Backed by Egypt 2026 fuel and maintenance benchmarks.',
 };
