@@ -103,16 +103,18 @@ function GalleryCard({ item }: { item: PublicGalleryItem }) {
 function CardMedia({
   src, item, errored, onError,
 }: { src: string; item: PublicGalleryItem; errored: boolean; onError: () => void }) {
-  // Render video element for mp4/video items
+  // Render video — preload=none so it doesn't auto-download the full mp4
   if (item.is_video) {
+    const pb = item.height && item.width ? `${(item.height / item.width) * 100}%` : '177.78%';
     return (
-      <div className="relative w-full" style={{ paddingBottom: item.height && item.width ? `${(item.height / item.width) * 100}%` : '177.78%' }}>
+      <div className="relative w-full" style={{ paddingBottom: pb }}>
         <video
           src={item.image_url}
           poster={item.thumbnail_url ?? undefined}
           controls
           playsInline
           muted
+          preload="none"
           className="absolute inset-0 w-full h-full object-cover"
         />
       </div>

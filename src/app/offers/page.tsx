@@ -122,6 +122,7 @@ export default async function OffersPage() {
                       controls
                       playsInline
                       muted
+                      preload="none"
                       className="w-full h-full object-cover"
                     />
                     {item.car_name && (
