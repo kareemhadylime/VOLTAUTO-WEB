@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Vehicle } from '@/types/vehicle';
 import { Button } from '@/components/ui/Button';
 import { formatEgp, formatKm } from '@/lib/format';
@@ -13,6 +14,9 @@ export function VehicleCard({ vehicle, featured = false }: { vehicle: Vehicle; f
         aria-label={`${vehicle.brand} ${vehicle.model}`}
         className="relative block aspect-[16/10] bg-gradient-to-br from-[#1a2a1a] to-[#0a1510]"
       >
+        {vehicle.heroImageUrl && (
+          <Image src={vehicle.heroImageUrl} alt={`${vehicle.brand} ${vehicle.model}`} fill sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,33vw" className="object-cover" unoptimized />
+        )}
         {featured && vehicle.featuredWeek && (
           <span className="absolute left-3 top-3 rounded bg-brand-green px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-eyebrow text-black">
             Featured · Week {vehicle.featuredWeek}

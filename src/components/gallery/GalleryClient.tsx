@@ -103,6 +103,22 @@ function GalleryCard({ item }: { item: PublicGalleryItem }) {
 function CardMedia({
   src, item, errored, onError,
 }: { src: string; item: PublicGalleryItem; errored: boolean; onError: () => void }) {
+  // Render video element for mp4/video items
+  if (item.is_video) {
+    return (
+      <div className="relative w-full" style={{ paddingBottom: item.height && item.width ? `${(item.height / item.width) * 100}%` : '177.78%' }}>
+        <video
+          src={item.image_url}
+          poster={item.thumbnail_url ?? undefined}
+          controls
+          playsInline
+          muted
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      </div>
+    );
+  }
+
   if (errored) {
     return (
       <div className="w-full aspect-square bg-slate-700 flex items-center justify-center text-slate-500 text-xs">
