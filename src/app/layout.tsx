@@ -17,8 +17,8 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500'
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
-  title: { default: 'VoltAuto · China EV imports to Egypt', template: '%s · VoltAuto' },
-  description: "Egypt's specialist for importing Chinese-made EVs door-to-door. Sourcing, shipping, customs, registration, service — one quote, one timeline, one team.",
+  title: { default: 'Electric Cars Egypt | VoltAuto — Chinese EV Imports', template: '%s | VoltAuto Egypt' },
+  description: "Egypt's #1 source for Chinese electric cars — NEVO, BYD, Denza, BMW EV. Imported door-to-door: sourcing, shipping, customs, registration. One quote, one timeline.",
   openGraph: { type: 'website', siteName: 'VoltAuto', locale: 'en_US' },
   twitter: { card: 'summary_large_image' },
   robots: { index: true, follow: true },
