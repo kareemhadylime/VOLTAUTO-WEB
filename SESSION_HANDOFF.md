@@ -148,6 +148,14 @@ vercel alias set voltauto-website-XXXXX-lime-investments.vercel.app voltauto.biz
 
 ---
 
+## Session 2026-05-10 (this session)
+
+- Mobile hamburger menu added to Nav.tsx — was completely missing on phones
+- Full mobile audit: no overflow-x, no fixed-pixel widths, grids all responsive
+- SESSION_HANDOFF.md created in voltauto-website repo (commit `9bf24ee`) — this file
+- SESSION_HANDOFF.md synced to voltauto-pricing main repo root (commit `6b9874b`)
+- Both repos pushed to GitHub for new-session pickup
+
 ## Previous Session Summary (2026-05-09 → 2026-05-10)
 
 - Built /gallery, /charging, /uae, /offers (Phase 5)
