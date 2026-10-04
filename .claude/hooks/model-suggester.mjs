@@ -74,12 +74,17 @@ if (score >= 4) {
 
 if (!line) process.exit(0);
 
+// Non-blocking (kareem 2026-10-04: "if not replied to within 2 minutes continue
+// automatically", on all repos). A hook cannot wait for a reply: it runs before
+// Claude starts, and once Claude ends its turn nothing resumes it without new
+// input — so the old "STOP until the user replies" gate stalled the work until
+// someone typed. The suggestion is still shown first; the work then goes on at
+// once, and the user can press Esc, switch model and re-send at any time.
 const additionalContext =
-  `[model-suggester] Start your reply with exactly these two lines and nothing else yet:\n` +
+  `[model-suggester] Start your reply with exactly these two lines:\n` +
   `Line 1: "${line}"\n` +
-  `Line 2: "→ Run \`${switchCmd}\` and re-send to switch, or reply **continue** to proceed on the current model."\n` +
-  `Then STOP. Do not answer the original prompt until the user replies. ` +
-  `If they reply "continue" (or any affirmative), answer the original prompt in full. ` +
+  `Line 2: "→ Proceeding on the current model — press Esc, run \`${switchCmd}\` and re-send to switch."\n` +
+  `Then answer the prompt in full right away — do not stop or wait for a reply. ` +
   `Do not explain the suggester itself unless asked.`;
 
 const out = {
